@@ -49,7 +49,7 @@ class MainActivity : BaseActivity<MainDesign>() {
                     when (it) {
                         MainDesign.Request.ToggleStatus -> {
                             if (clashRunning)
-                                stopClashService()
+                                clashManager?.stop()
                             else
                                 design.startClash()
                         }
@@ -120,9 +120,9 @@ class MainActivity : BaseActivity<MainDesign>() {
             return
         }
 
-        val vpnRequest = startClashService()
-
+        clashManager?.start()
         try {
+            val vpnRequest = startClashService()
             if (vpnRequest != null) {
                 val result = startActivityForResult(
                     ActivityResultContracts.StartActivityForResult(),
@@ -130,7 +130,7 @@ class MainActivity : BaseActivity<MainDesign>() {
                 )
 
                 if (result.resultCode == RESULT_OK)
-                    startClashService()
+                    clashManager?.start()
             }
         } catch (e: Exception) {
             design?.showToast(R.string.unable_to_start_vpn, ToastDuration.Long)
