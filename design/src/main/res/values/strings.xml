@@ -13,6 +13,10 @@
     <string name="direct_mode">Direct Mode</string>
     <string name="rule_mode">Rule Mode</string>
     <string name="global_mode">Global Mode</string>
+    <string name="tun_mode">Tun Mode</string>
+    <string name="http">HTTP</string>
+    <string name="path">Path</string>
+    <string name="del_host">Del Host</string>
     <string name="proxy_empty_tips">No groups can be displayed</string>
 
     <string name="profiles">Profiles</string>
