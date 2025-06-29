@@ -108,4 +108,66 @@ class ClashManager(private val context: Context) : IClashManager,
             }
         }
     }
+
+    fun start() {
+        val serviceMode = store.serviceMode
+        if (serviceMode == TunnelState.Mode.Tun) {
+            startRoot()
+        } else {
+            TunService.start(context)
+        }
+    }
+
+    private fun startRoot() {
+        if (!Root.exec(
+                "iptables -w 100 -I FORWARD -o tun0 -j ACCEPT",
+                "iptables -w 100 -I FORWARD -i tun0 -j ACCEPT"
+            )
+        ) {
+            Log.e("Failed to set iptables forward rules")
+            // ignore error
+        }
+
+        val config = ConfigurationOverride(
+            httpPort = null,
+            socksPort = null,
+            redirectPort = null,
+            tproxyPort = null,
+            mixedPort = null,
+            authentication = null,
+            allowLan = null,
+            bindAddress = null,
+            mode = null,
+            logLevel = null,
+            ipv6 = null,
+            hosts = null,
+            dns = null,
+            externalController = null,
+            externalControllerTLS = null,
+            secret = null,
+            externalControllerCors = null,
+            tun = TunConfiguration(
+                enable = true,
+                device = "tun0",
+                stack = TunStack.GVisor,
+                dnsHijack = emptyList(),
+                autoRoute = true,
+                autoDetectInterface = true
+            )
+        )
+
+        Clash.patchOverride(Clash.OverrideSlot.Session, config)
+    }
+
+    fun stop() {
+        if (store.serviceMode == TunnelState.Mode.Tun) {
+            Root.exec(
+                "iptables -w 100 -D FORWARD -o tun0 -j ACCEPT",
+                "iptables -w 100 -D FORWARD -i tun0 -j ACCEPT"
+            )
+            Clash.clearOverride(Clash.OverrideSlot.Session)
+        } else {
+            TunService.stop(context)
+        }
+    }
 }
