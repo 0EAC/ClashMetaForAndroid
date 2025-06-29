@@ -79,9 +79,21 @@ data class ConfigurationOverride(
 
     @SerialName("geox-url")
     val geoxurl: GeoXUrl = GeoXUrl(),
+
+   @SerialName("http")
+   val http: Http = Http(),
 ) : Parcelable {
-    @Serializable
-    data class Dns(
+   @Serializable
+   data class Http(
+       @SerialName("path")
+       var path: String? = null,
+
+       @SerialName("del-host")
+       var delHost: Boolean? = null,
+   )
+
+   @Serializable
+   data class Dns(
         @SerialName("enable")
         var enable: Boolean? = null,
 
