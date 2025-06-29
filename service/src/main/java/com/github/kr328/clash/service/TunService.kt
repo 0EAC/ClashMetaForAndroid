@@ -229,6 +229,16 @@ class TunService : VpnService(), CoroutineScope by CoroutineScope(Dispatchers.De
     }
 
     companion object {
+        fun start(context: android.content.Context) {
+            val intent = Intent(context, TunService::class.java)
+            context.startService(intent)
+        }
+
+        fun stop(context: android.content.Context) {
+            val intent = Intent(context, TunService::class.java)
+            context.stopService(intent)
+        }
+
         private const val TUN_MTU = 9000
         private const val TUN_SUBNET_PREFIX = 30
         private const val TUN_GATEWAY = "172.19.0.1"
