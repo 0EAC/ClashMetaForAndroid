@@ -185,13 +185,15 @@ class OverrideSettingsDesign(
                     null,
                     TunnelState.Mode.Direct,
                     TunnelState.Mode.Global,
-                    TunnelState.Mode.Rule
+                    TunnelState.Mode.Rule,
+                    TunnelState.Mode.Tun
                 ),
                 valuesText = arrayOf(
                     R.string.dont_modify,
                     R.string.direct_mode,
                     R.string.global_mode,
-                    R.string.rule_mode
+                    R.string.rule_mode,
+                    R.string.tun_mode
                 ),
                 title = R.string.mode
             )
@@ -223,6 +225,23 @@ class OverrideSettingsDesign(
                 valueAdapter = TextAdapter.String,
                 title = R.string.hosts,
                 placeholder = R.string.dont_modify,
+            )
+
+            category(R.string.http)
+
+            editableText(
+                value = configuration.http::path,
+                adapter = NullableTextAdapter.String,
+                title = R.string.path,
+                placeholder = R.string.dont_modify,
+                empty = R.string.default_,
+            )
+
+            selectableList(
+                value = configuration.http::delHost,
+                values = booleanValues,
+                valuesText = booleanValuesText,
+                title = R.string.del_host,
             )
 
             category(R.string.dns)
